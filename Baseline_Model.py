@@ -60,17 +60,22 @@ ground_truth_labels = []
 
 for instrument in instrument_list:
     folder_path = '/content/drive/MyDrive/Datasets/Combined_Data/' + instrument
+    i = 0
     for file_name in os.listdir(folder_path):
         if file_name.endswith('.wav'):  # Assuming the files are .wav
+            i += 1
             file_path = os.path.join(folder_path, file_name)
-            
+
             detailed_features = extract_detailed_features(file_path)
             mfcc_mean = extract_mfcc_means(file_path)
-            
+
             combined_features = np.concatenate((detailed_features, mfcc_mean))
-            
+
             inputs.append(combined_features)
             ground_truth_labels.append(instrument)
+        if i >= 750:
+          break
+    print(instrument, i)
 
 X_inputs, y_labels = np.array(inputs), np.array(ground_truth_labels)
 
